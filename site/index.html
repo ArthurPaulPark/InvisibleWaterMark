@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>WaterMark — 보이지 않는 워터마크</title>
+<meta name="description" content="사진에 육안으로 보이지 않는 워터마크를 심습니다. 브라우저 안에서만 처리되며 사진은 어디로도 전송되지 않습니다.">
+<style>
+  :root{--bg:#fff;--panel:#f6f7f9;--line:#e3e6ea;--fg:#12151a;--dim:#5b636e;
+        --accent:#2f6df6;--ok:#1a7f45;--warn:#9a6700;--bad:#c22b2b;--code:#f0f2f5}
+  @media (prefers-color-scheme:dark){:root{--bg:#0e1116;--panel:#161b22;--line:#262d38;--fg:#e6edf3;
+        --dim:#98a1ad;--accent:#6ea0ff;--ok:#3fb950;--warn:#d29922;--bad:#f85149;--code:#11161d}}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.7 -apple-system,BlinkMacSystemFont,
+    "Apple SD Gothic Neo",Pretendard,sans-serif;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:760px;margin:0 auto;padding:28px 20px 80px}
+  header{margin-bottom:6px;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+  h1{font-size:21px;margin:0;letter-spacing:-.3px}
+  .sub{color:var(--dim);font-size:13px}
+  code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;
+    background:var(--code);padding:.1em .35em;border-radius:4px}
+  .bar{display:flex;align-items:center;gap:9px;margin:16px 0 20px;padding:10px 14px;
+    background:var(--panel);border:1px solid var(--line);border-radius:9px;font-size:13px}
+  .dot{width:8px;height:8px;border-radius:50%;flex:none;background:var(--warn)}
+  .tabs{display:flex;gap:3px;border-bottom:1px solid var(--line);margin-bottom:22px}
+  .tab{padding:9px 15px;background:none;border:0;color:var(--dim);cursor:pointer;font-size:14px;
+    border-bottom:2px solid transparent;margin-bottom:-1px;font-family:inherit}
+  .tab.on{color:var(--fg);border-bottom-color:var(--accent)}
+  .drop{border:1.5px dashed var(--line);border-radius:10px;padding:34px 18px;text-align:center;
+    color:var(--dim);cursor:pointer;transition:.15s}
+  .drop:hover,.drop.over{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 6%,transparent);color:var(--fg)}
+  .drop.has{padding:15px;border-style:solid;color:var(--fg)}
+  .row{display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin-top:14px}
+  select,input[type=text],input[type=password],textarea{background:var(--bg);border:1px solid var(--line);
+    color:var(--fg);border-radius:7px;padding:8px 11px;font-size:13px;font-family:inherit}
+  textarea{width:100%;resize:vertical}
+  input[type=text]{flex:1;min-width:200px;font-family:ui-monospace,monospace;font-size:12px}
+  button{background:var(--accent);border:0;color:#fff;padding:9px 17px;border-radius:7px;cursor:pointer;
+    font-size:13.5px;font-weight:600;font-family:inherit}
+  button.alt{background:transparent;border:1px solid var(--line);color:var(--fg)}
+  button:disabled{opacity:.45;cursor:default}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:17px;margin-top:18px}
+  .card h3{margin:0 0 10px;font-size:14.5px}
+  img.prev{max-width:100%;border-radius:8px;display:block;margin-bottom:12px}
+  .kv{display:flex;justify-content:space-between;gap:12px;padding:6px 0;border-bottom:1px solid var(--line);font-size:13.5px}
+  .kv:last-of-type{border-bottom:0} .kv span:first-child{color:var(--dim)}
+  .kv span:last-child{text-align:right;word-break:break-all}
+  .pill{display:inline-block;padding:1px 8px;border-radius:20px;font-size:11px;font-weight:600}
+  .pill.ok{background:color-mix(in srgb,var(--ok) 18%,transparent);color:var(--ok)}
+  .pill.bad{background:color-mix(in srgb,var(--bad) 18%,transparent);color:var(--bad)}
+  .pill.warn{background:color-mix(in srgb,var(--warn) 20%,transparent);color:var(--warn)}
+  .note{color:var(--dim);font-size:12.5px;margin-top:9px}
+  .err{color:var(--bad);font-size:13px;margin-top:10px}
+  .hide{display:none}
+  .step{display:flex;align-items:center;gap:11px;padding:10px 0;border-bottom:1px solid var(--line)}
+  .step:last-of-type{border-bottom:0} .step div{flex:1;min-width:0}
+  .step .sub{display:block;font-size:12px;margin-top:1px}
+  .num{flex:none;width:21px;height:21px;border-radius:50%;background:var(--warn);color:#0e1116;
+    font-weight:700;font-size:12px;display:grid;place-items:center}
+  details{margin-top:26px;border-top:1px solid var(--line);padding-top:18px}
+  summary{cursor:pointer;font-size:14px;font-weight:600}
+  details ul{padding-left:1.1em} details li{color:var(--dim);font-size:13.5px;margin:.4em 0}
+  footer{margin-top:30px;color:var(--dim);font-size:12.5px}
+  a{color:var(--accent)}
+  progress{width:100%;height:5px;margin-top:10px}
+</style>
+</head>
+<body><div class="wrap">
+
+<header>
+  <h1>WaterMark</h1>
+  <span class="sub">보이지 않는 워터마크 · <b>사진이 이 탭을 벗어나지 않습니다</b></span>
+</header>
+<p class="note" style="margin:0">서버가 없습니다. 브라우저 안에서만 계산합니다 —
+  인터넷을 끊어도 동작합니다. <a href="https://github.com/ArthurPaulPark/InvisibleWaterMark">소스</a></p>
+
+<div class="bar"><div class="dot" id="kdot"></div><div id="kmsg">확인 중… (이 문구가 계속 보이면 새로고침해 보세요)</div>
+  <div style="flex:1"></div><code id="kpub" class="sub"></code></div>
+
+<div id="unsupported" class="card hide" style="border-color:var(--bad)">
+  <h3>이 브라우저에서는 서명을 만들 수 없습니다</h3>
+  <p class="note" style="margin-top:0">Ed25519 서명을 지원하지 않는 브라우저입니다.
+    최신 Chrome·Safari·Firefox 를 쓰거나, 도장 없이 <b>문장만 심는 기능</b>은 그대로 쓸 수 있습니다.</p>
+</div>
+
+<div class="tabs">
+  <button class="tab on" data-t="protect">보호하기</button>
+  <button class="tab" data-t="verify">검증하기</button>
+  <button class="tab" data-t="key">내 도장</button>
+</div>
+
+<section id="protect">
+  <div class="card hide" id="setup" style="border-color:var(--accent)">
+    <h3>시작하기 전에 — 내 도장을 하나 만듭니다</h3>
+    <p class="note" style="margin-top:0">사진에 넣을 서명의 근거입니다. <b>한 번만 만들면 됩니다.</b></p>
+    <div class="kv"><span>개인키 <b>= 도장</b></span><span>이 브라우저에만 저장됩니다</span></div>
+    <div class="kv"><span>공개키 <b>= 도장 자국</b></span><span>공개해서 남이 내 사진임을 확인하게 합니다</span></div>
+    <div class="row" id="setupPick">
+      <button id="setupGo">도장 만들기</button>
+      <button class="alt" id="setupSkip">필요 없어요 — 문장만 넣을래요</button>
+    </div>
+    <div class="err hide" id="setupErr"></div>
+  </div>
+
+  <div class="drop" id="pdrop">사진을 끌어다 놓거나 클릭해서 선택<input type="file" accept="image/*" hidden id="pfile"></div>
+  <div class="card hide" id="facesCard" style="margin-top:14px">
+    <div id="faces"></div>
+  </div>
+  <div class="row">
+    <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px">
+      <input type="checkbox" id="pcleanonly"> 워터마크 없이 위치·시각·기종 정보(EXIF)만 지우기</label>
+  </div>
+  <div id="pwmBlock">
+    <div class="row" style="align-items:flex-start">
+      <textarea id="pmsg" rows="2" placeholder="사진에 심을 문장 (선택) — 사람 눈에는 안 보입니다"></textarea>
+    </div>
+    <div class="row" style="margin-top:5px"><span class="sub" id="pcap">사진을 먼저 선택하면 넣을 수 있는 길이가 나옵니다</span></div>
+    <div class="row">
+      <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px">
+        <input type="checkbox" id="pkeyless"> 도장 없이 문장만</label>
+    </div>
+  </div>
+  <div class="row">
+    <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px">
+      <input type="checkbox" id="pnoai" checked> AI 학습 거부 선언</label>
+  </div>
+  <div class="row"><select id="platform"></select><button id="pgo" disabled>보호하기</button></div>
+  <progress id="pbar" class="hide"></progress>
+  <div class="err hide" id="perr"></div>
+  <div class="card hide" id="pres"></div>
+</section>
+
+<section id="verify" class="hide">
+  <div class="drop" id="vdrop">검사할 사진을 끌어다 놓거나 클릭<input type="file" accept="image/*" hidden id="vfile"></div>
+  <div class="row"><input type="text" id="vpub" placeholder="작성자의 공개키 (선택 — 비우면 심긴 문장만 읽습니다)"></div>
+  <div class="row"><div class="drop" id="sdrop" style="flex:1;padding:13px;font-size:12.5px">
+    사이드카 .sig.json (선택)<input type="file" accept=".json" hidden id="sfile"></div></div>
+  <div class="row"><button id="vgo" disabled>검증</button></div>
+  <progress id="vbar" class="hide"></progress>
+  <div class="err hide" id="verr"></div>
+  <div class="card hide" id="vres"></div>
+</section>
+
+<section id="key" class="hide">
+  <div class="card">
+    <h3>공개키 <span class="sub" style="font-weight:400">= 내 도장 자국</span></h3>
+    <p class="note" style="margin-top:0">프로필·블로그 등에 <b>공개하세요.</b> 공개해도 안전합니다 —
+      이것만으로는 내 사진을 흉내낼 수 없습니다.</p>
+    <textarea id="pubbox" rows="2" readonly></textarea>
+    <div class="row"><button class="alt" id="copy">복사</button></div>
+  </div>
+  <div class="card" style="border-color:var(--warn)">
+    <h3>개인키 백업 — 꼭 하세요</h3>
+    <p class="note" style="margin-top:0">개인키는 <b>이 브라우저에만</b> 있습니다.
+      브라우저 데이터를 지우거나 다른 기기로 옮기면 <b>사라집니다.</b>
+      사라지면 지금까지 심은 워터마크를 증명할 수 없습니다.</p>
+    <div class="row">
+      <button id="expkey">개인키 내려받기</button>
+      <button class="alt" id="impkey">파일에서 불러오기</button>
+      <input type="file" accept=".key,.bin,application/octet-stream" hidden id="keyfile">
+      <button class="alt" id="delkey" style="border-color:var(--bad);color:var(--bad)">도장 지우기</button>
+    </div>
+    <div class="err hide" id="kerr"></div>
+  </div>
+  <div class="card">
+    <h3>진단</h3>
+    <p class="note" style="margin-top:0">도장이 만들어지지 않으면 이 표를 알려주세요.</p>
+    <div id="diag"></div>
+  </div>
+</section>
+
+<details>
+  <summary>이 도구가 못 하는 것</summary>
+  <ul>
+    <li>훔쳐가는 것을 <b>막지 못합니다.</b> 사후에 "내 것"임을 보이는 도구입니다.</li>
+    <li><b>AI 학습을 막지 못합니다.</b> 국제 표준(IPTC/PLUS) 거부 표시를 넣지만 강제력이 없고,
+      SNS 업로드 때 지워집니다.</li>
+    <li><b>AI 재생성(img2img)</b>을 거치면 사라집니다.</li>
+    <li><b>크롭과 색보정이 겹치면</b> 놓칠 수 있습니다.</li>
+    <li>내 공개키를 알고 코드를 고치는 <b>표적 공격은 막지 못합니다.</b></li>
+    <li><b>먼저 만들었다는 것은 증명하지 못합니다.</b> 서명의 시각은 자기 신고입니다.</li>
+    <li><b>얼굴 자동 찾기는 완벽하지 않습니다.</b> 옆얼굴·작은 얼굴·가려진 얼굴을
+      놓칩니다. 올리기 전에 눈으로 확인하고, 놓친 얼굴은 직접 칠하세요.</li>
+  </ul>
+</details>
+
+<footer>MIT · 알고리즘은 <a href="https://github.com/ShieldMnt/invisible-watermark">invisible-watermark</a>(MIT)에서 출발했습니다.</footer>
+
+</div>
+<script type="module" src="./app.js"></script>
+</body></html>

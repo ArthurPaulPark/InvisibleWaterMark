@@ -1,0 +1,48 @@
+이 프로젝트는 아래 오픈소스를 포함하거나 파생했습니다.
+
+────────────────────────────────────────────────────────────────────────
+invisible-watermark  (https://github.com/ShieldMnt/invisible-watermark)
+
+dwtdctsvd.py 는 이 프로젝트의 dwtDctSvd 구현에서 출발했습니다.
+이식 시점에 원본과 바이트 단위로 동일한 출력을 확인한 뒤, 역 DWT 밴드 순서
+수정·uint8 랩어라운드 수정·주기 격자 배치·희소 칸 선택·벡터화를 더했습니다.
+
+MIT License
+
+Copyright (c) 2021 ShieldMnt
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+────────────────────────────────────────────────────────────────────────
+face-api.js — 얼굴 탐지
+  site/vendor/ 아래 파일들은 @vladmandic/face-api 저장소의 master 브랜치에서 가져왔다
+  (가져온 시점의 package.json 이 1.7.15 였을 뿐, 릴리스 태그로 고정한 것이 아니다).
+  https://github.com/vladmandic/face-api  (MIT)
+  원본: face-api.js by Vincent Mühler  https://github.com/justadudewhohacks/face-api.js  (MIT)
+  모델 가중치도 같은 저장소·같은 라이선스다.
+
+  태그가 아니라서 버전 번호로는 다시 받아도 같은 내용이 온다는 보장이 없다.
+  대신 파일 해시를 여기 남긴다 — 조용히 바뀌면 버전 번호가 아니라 이 해시로 알아챈다.
+  14f0e9813f6d9f14a9cdafb6543a74835ebb13085090e2942310a7a737f55d9a  site/vendor/face-api.esm.js
+  9a1a5dd19fd814fd5095c3cb58f8e0d3193b8c5b9a6715b30a69d559aea31ad4  site/vendor/models/face_landmark_68_tiny_model-weights_manifest.json
+  b98e9f2f7da76f8a6dda9741a36ed485b224b889d552de2b2c1bb16217f67bfc  site/vendor/models/face_landmark_68_tiny_model.bin
+  5d1af4849ac48d5b985f4a9b16010c512353ddd6fcc63d50fd0bc9e9e64296e5  site/vendor/models/tiny_face_detector_model-weights_manifest.json
+  b7503ce7df31039b1c43316a9b865cab6a70dd748cc602d3fa28b551503c3871  site/vendor/models/tiny_face_detector_model.bin
+  2835640602d53718aa6ae9a42896327eaa21beefed056c218d32ca7d79e1e2f8  site/vendor/models/ssd_mobilenetv1_model.bin
+  888f744dffbc84f5f060d1f8427d9742341943a2dfaaf9205d10029b7e7a2955  site/vendor/models/ssd_mobilenetv1_model-weights_manifest.json
