@@ -5,7 +5,7 @@ cd "$(dirname "$0")" || exit 1
 URL="http://127.0.0.1:8765"
 echo
 echo "  ┌──────────────────────────────┐"
-echo "  │   WaterMark                  │"
+echo "  │   InvisibleWaterMark         │"
 echo "  └──────────────────────────────┘"
 echo
 

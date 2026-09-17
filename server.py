@@ -56,7 +56,7 @@ async def lifespan(_app: FastAPI):
     watcher.cancel()
 
 
-app = FastAPI(title="WaterMark", lifespan=lifespan)
+app = FastAPI(title="InvisibleWaterMark", lifespan=lifespan)
 
 # 기본값 1MB 를 넘으면 업로드가 디스크 임시파일로 새어나간다. 사진은 대부분 그보다 크다.
 # 상한을 올려 메모리 안에서만 다룬다 (업로드 자체는 _read 에서 50MB 로 제한된다).
