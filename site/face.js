@@ -13,7 +13,7 @@
 // 블록4/지터12 = 100.0%, 블록4/지터24 = 100.0%, 블록3/지터12 = 100.0% — 이
 // 설정들에서 공격자는 사실상 매번 정확한 원본을 되찾는다. 실제로 지키는 것은
 // solid(재식별 2.0%)뿐이다. 자세한 근거와 전체 측정표는 watermark.py 의 같은
-// 주석과 docs/superpowers/specs/2026-09-13-face-masking-design.md 에 있다.
+// 주석과 docs/face-masking-design.md 에 있다.
 // 아래 상수는 watermark.py 와 같은 값이어야 한다 — 한쪽만 고치지 말 것.
 export const MASK_SOLID = 'solid';
 export const MASK_MOSAIC = 'mosaic';

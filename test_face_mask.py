@@ -195,7 +195,7 @@ def test_reidentification_is_chance_level():
 
     mosaic 에는 통과선을 두지 않는다. 기본 상수(블록4/지터12)에서 재식별은
     100.0%다 — 지터를 24로 올려도 100.0%, 블록을 3으로 줄여도 100.0%로,
-    통과할 만한 조합이 없다(전체 측정표: docs/superpowers/specs/2026-09-13-face-masking-design.md).
+    통과할 만한 조합이 없다(전체 측정표: docs/face-masking-design.md).
     통과 기준을 mosaic 이 넘을 수 있는 값으로 낮추면 "가려준다"는 거짓말이
     된다. 그래서 여기서는 실제로 지켜야 할 불변식만 확인한다: 기본값(solid)이
     선택지(mosaic)보다 압도적으로 강해야 한다는 것.

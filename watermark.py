@@ -89,7 +89,7 @@ JPEG_Q = 95
 # 보이지 않게 된다. 그래서 기본 상수는 평범한 모자이크 모양을 내는 값(블록4/
 # 지터12)으로 둔다 — 그 대신 이 모드가 가린다는 착각을 주지 않도록 UI 라벨에
 # 사실대로 적는다. 실제로 지키는 것은 단색(재식별 2.0%)뿐이다.
-# (측정 상세: docs/superpowers/specs/2026-09-13-face-masking-design.md)
+# (측정 상세: docs/face-masking-design.md)
 MASK_SOLID = "solid"      # 기본. 유일하게 보호하는 방식
 MASK_MOSAIC = "mosaic"    # 모양만 흉내낸다 — 복원된다. 보호 수단이 아니다
 
